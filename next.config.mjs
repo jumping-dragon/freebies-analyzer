@@ -18,6 +18,9 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+
+  compress: false,
+  output: 'standalone'
 };
 
 export default config;

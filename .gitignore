@@ -40,3 +40,10 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# open-next
+/.open-next/
+
+# terraform
+/infra/.terraform*
+/infra/terraform.tfstate*
