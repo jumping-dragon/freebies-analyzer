@@ -1,5 +1,10 @@
 // Provider configuration
 terraform {
+  backend "s3" {
+    bucket = "alvinjanuar.com-stacks"
+    key = "prod/test.alvinjanuar.com/terraform.tfstate"
+    region = "us-east-1"
+  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
