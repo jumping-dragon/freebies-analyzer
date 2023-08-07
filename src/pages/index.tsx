@@ -11,7 +11,7 @@ export default function Home() {
       <Head>
         <title>Freebies Analyzer</title>
         <meta name="description" content="freebies analyzer for aws" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/assets/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
