@@ -28,7 +28,7 @@ resource "aws_lambda_function" "cloudfront_logs_function" {
   filename                = data.archive_file.cloudfront_logs_zip.output_path
   source_code_hash        = data.archive_file.cloudfront_logs_zip.output_base64sha256
   role                    = aws_iam_role.cloudfront_logs_role.arn
-  kms_key_arn             = var.kms_key_arn
+  # kms_key_arn             = var.kms_key_arn
   code_signing_config_arn = try(aws_lambda_code_signing_config.signing_config[0].arn, null)
 
   tracing_config {
@@ -108,7 +108,7 @@ resource "aws_iam_role_policy" "cloudfront_logs_role_policy" {
 resource "aws_cloudwatch_log_group" "lambda_log_group" {
   name              = "/aws/lambda/${var.log_group_name}"
   retention_in_days = var.lambda_log_retention_period
-  kms_key_id        = try(aws_kms_key.cloudwatch_logs_key[0].arn, var.cloudwatch_log_group_kms_key_arn)
+  # kms_key_id        = try(aws_kms_key.cloudwatch_logs_key[0].arn, var.cloudwatch_log_group_kms_key_arn)
 }
 
 resource "aws_lambda_permission" "s3_bucket_invoke_function" {

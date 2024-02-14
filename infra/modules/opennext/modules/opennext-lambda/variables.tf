@@ -94,17 +94,17 @@ variable "environment_variables" {
   default     = {}
 }
 
-variable "kms_key_arn" {
-  type        = string
-  description = "The KMS key to use for encrypting the Lambda function"
-  default     = null
-}
+# variable "kms_key_arn" {
+#   type        = string
+#   description = "The KMS key to use for encrypting the Lambda function"
+#   default     = null
+# }
 
 variable "log_group" {
   description = "Options passed to the CloudWatch log group for the Lambda function"
   type = object({
     retention_in_days = number
-    kms_key_id        = string
+    # kms_key_id        = string
   })
 }
 

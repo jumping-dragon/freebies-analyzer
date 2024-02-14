@@ -61,11 +61,11 @@ variable "lambda_log_retention_period" {
   default = 365
 }
 
-variable "kms_key_arn" {
-  type        = string
-  default     = null
-  description = "The KMS key to use for encrypting the Lambda function"
-}
+# variable "kms_key_arn" {
+#   type        = string
+#   default     = null
+#   description = "The KMS key to use for encrypting the Lambda function"
+# }
 
 variable "vpc_config" {
   type = object({
@@ -75,11 +75,11 @@ variable "vpc_config" {
   default = null
 }
 
-variable "cloudwatch_log_group_kms_key_arn" {
-  description = "The KMS key to use for encrypting the CloudWatch log group"
-  type        = string
-  default     = null
-}
+# variable "cloudwatch_log_group_kms_key_arn" {
+#   description = "The KMS key to use for encrypting the CloudWatch log group"
+#   type        = string
+#   default     = null
+# }
 
 variable "code_signing_config" {
   description = "Code Signing Config for the Lambda Function"

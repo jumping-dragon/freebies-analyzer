@@ -102,11 +102,11 @@ locals {
         actions   = ["sqs:SendMessage"]
         resources = [module.revalidation_queue.queue.arn]
       },
-      {
-        effect    = "Allow"
-        actions   = ["kms:GenerateDataKey", "kms:Decrypt"]
-        resources = [module.revalidation_queue.queue_kms_key.arn]
-      }
+      # {
+      #   effect    = "Allow"
+      #   actions   = ["kms:GenerateDataKey", "kms:Decrypt"]
+      #   resources = [module.revalidation_queue.queue_kms_key.arn]
+      # }
     ], coalesce(try(var.server_options.iam_policy, null), []))
   }
 
@@ -135,7 +135,7 @@ locals {
 
     log_group = {
       retention_in_days = coalesce(try(var.image_optimization_options.log_group.retention_in_days, null), 365)
-      kms_key_id        = try(var.image_optimization_options.log_group.kms_key_id, null)
+      # kms_key_id        = try(var.image_optimization_options.log_group.kms_key_id, null)
     }
 
     networking = {
@@ -203,11 +203,11 @@ locals {
         actions   = ["sqs:ReceiveMessage", "sqs:DeleteMessage", "sqs:GetQueueAttributes"]
         resources = [module.revalidation_queue.queue.arn]
       },
-      {
-        effect    = "Allow"
-        actions   = ["kms:Decrypt", "kms:DescribeKey"]
-        resources = [module.revalidation_queue.queue_kms_key.arn]
-      }
+      # {
+      #   effect    = "Allow"
+      #   actions   = ["kms:Decrypt", "kms:DescribeKey"]
+      #   resources = [module.revalidation_queue.queue_kms_key.arn]
+      # }
     ], coalesce(try(var.revalidation_options.iam_policy, null), []))
   }
 
