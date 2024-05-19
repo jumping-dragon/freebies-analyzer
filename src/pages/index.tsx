@@ -19,7 +19,7 @@ export default function Home() {
             Freebies Analyzer
           </h1>
           <p className="text-2xl text-white" style={{ color: '#fff' }}>
-            {hello.data ? hello.data.items.map(FreeTierItem) : "Loading tRPC query..."}
+            {hello.data ? hello.data.items.map(FreeTierItem) : "Loading..."}
           </p>
         </div>
       </main >
