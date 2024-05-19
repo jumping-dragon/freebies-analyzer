@@ -27,7 +27,7 @@ export default function TSEPage() {
   const [code, setCode] = useState<number>(2330);
   const [type, setType] = useState<"otc" | "tse">("tse");
   const debouncedCode = useDebounce(code, 1);
-  const { data, error } = api.tse.getRaw.useQuery({
+  const { data, isError, error } = api.tse.getRaw.useQuery({
     code: debouncedCode,
     type,
   });
@@ -36,14 +36,13 @@ export default function TSEPage() {
   const parameterView = useMemo(() => {
     if (data) {
       const { bids, asks, ...rest } = data?.parameters;
-      return rest
+      return rest;
     }
-  }, [data])
+  }, [data]);
 
   if (size.width === null || size.height === null) {
     return null;
   }
-
 
   return (
     <>
@@ -75,48 +74,53 @@ export default function TSEPage() {
             </SelectContent>
           </Select>
         </div>
-        <div className="container flex">
-          <Table className="dark text-white">
-            <TableCaption>
-              Today&lsquo;s total order of {data?.metadata.name} (
-              {data?.metadata.code})
-            </TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="text-primary">Buy</TableHead>
-                <TableHead className="text-primary">Amount</TableHead>
-                <TableHead className="text-destructive">Sell</TableHead>
-                <TableHead className="text-destructive">Amount</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data?.parameters.asks.map((bid) => (
-                <TableRow key={bid.price}>
-                  <TableCell>-</TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell className="text-destructive">
-                    {bid.price}
-                  </TableCell>
-                  <TableCell className="text-destructive">
-                    {bid.amount}
-                  </TableCell>
+        {data ? (
+          <div className="container flex">
+            <Table className="dark text-white">
+              <TableCaption>
+                Today&lsquo;s total order of {data?.metadata.name} (
+                {data?.metadata.code})
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-primary">Buy</TableHead>
+                  <TableHead className="text-primary">Amount</TableHead>
+                  <TableHead className="text-destructive">Sell</TableHead>
+                  <TableHead className="text-destructive">Amount</TableHead>
                 </TableRow>
-              ))}
-              {data?.parameters.bids.map((bid) => (
-                <TableRow key={bid.price}>
-                  <TableCell className="text-primary">{bid.price}</TableCell>
-                  <TableCell className="text-primary">{bid.amount}</TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell>-</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <pre className="text-white">
-            {JSON.stringify({ parameters: parameterView }, null, 2)}
-          </pre>
-          <pre className="text-white">{JSON.stringify(error, null, 2)}</pre>
-        </div>
+              </TableHeader>
+              <TableBody>
+                {data?.parameters.asks.map((bid) => (
+                  <TableRow key={bid.price}>
+                    <TableCell>-</TableCell>
+                    <TableCell>-</TableCell>
+                    <TableCell className="text-destructive">
+                      {bid.price}
+                    </TableCell>
+                    <TableCell className="text-destructive">
+                      {bid.amount}
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {data?.parameters.bids.map((bid) => (
+                  <TableRow key={bid.price}>
+                    <TableCell className="text-primary">{bid.price}</TableCell>
+                    <TableCell className="text-primary">{bid.amount}</TableCell>
+                    <TableCell>-</TableCell>
+                    <TableCell>-</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <pre className="text-white">
+              {JSON.stringify({ parameters: parameterView }, null, 2)}
+            </pre>
+          </div>
+        ) : isError ? (
+          <div className="text-white">{error.message}</div>
+        ) : (
+          <div className="text-white">Loading...</div>
+        )}
         <Graph width={size.width} height={size.height} />
       </main>
     </>

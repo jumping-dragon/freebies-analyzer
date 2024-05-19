@@ -53,7 +53,7 @@ locals {
    **/
   server_options = {
     package = {
-      source_dir = coalesce(try(var.server_options.package.source_dir, null), "${local.opennext_abs_path}/server-function/")
+      source_dir = coalesce(try(var.server_options.package.source_dir, null), "${local.opennext_abs_path}/server-functions/default/")
       output_dir = coalesce(try(var.server_options.package.output_dir, null), "${local.opennext_abs_path}/.build/")
     }
 
