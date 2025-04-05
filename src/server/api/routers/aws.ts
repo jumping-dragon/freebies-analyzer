@@ -3,18 +3,15 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const awsRouter = createTRPCRouter({
   freeTierLimit: publicProcedure
-    // .input(z.object({ size: z.number().default(40) }))
-    // .query(async ({ input }) => {
-    .query(async () => {
-      const input = {
-        size: 40
-      }
+    .input(z.object({ size: z.number().default(40), cursor: z.number().default(0) }))
+    .query(async ({ input: { size, cursor } }) => {
       const params = {
         "item.directoryId": "free-tier-products",
         sort_by: "item.additionalFields.SortRank",
         sort_order: "asc",
-        size: input.size + "",
+        size: size + "",
         "item.locale": "en_US",
+        page: cursor + "",
       };
       const url =
         "https://aws.amazon.com/api/dirs/items/search?" +
@@ -24,8 +21,13 @@ export const awsRouter = createTRPCRouter({
           ...Object.entries(params),
         ]).toString();
       const data = await fetch(url);
-      const response = (await data.json()) as FreeTierLimitResponse;
-      return { ...response };
+      const { items, metadata, ...response } = (await data.json()) as FreeTierLimitResponse;
+      return {
+        items,
+        metadata,
+        nextPage: metadata.count === size ? cursor + 1 : undefined,
+        ...response
+      };
     }),
 });
 

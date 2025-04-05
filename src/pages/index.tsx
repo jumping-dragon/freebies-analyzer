@@ -1,10 +1,41 @@
+import { useMotionValueEvent, useScroll } from "framer-motion";
 import Head from "next/head";
 import React from "react";
 import { type ItemType } from "~/server/api/routers/aws";
 import { api } from "~/utils/api";
 
 export default function Home() {
-  const aws = api.aws.freeTierLimit.useQuery();
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    refetch,
+  } = api.aws.freeTierLimit.useInfiniteQuery(
+    {
+      size: 19,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextPage,
+    },
+  );
+
+  const { scrollY, scrollYProgress } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", () => {
+    const parameter = scrollYProgress.get();
+    if (
+      parameter >= 0.8 &&
+      parameter <= 0.99 &&
+      hasNextPage &&
+      !isFetchingNextPage
+    ) {
+      fetchNextPage().catch((error) => console.log(error));
+      // console.log("FETCHING NEXT PAGE", parameter);
+    }
+  });
 
   return (
     <>
@@ -18,13 +49,24 @@ export default function Home() {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Freebies Analyzer
           </h1>
-          <p className="text-2xl text-white" style={{ color: "#fff" }}>
-            {aws.data
-              ? aws.data.items.map((i, id) => (
-                  <FreeTierItem key={id} item={i.item} />
-                ))
-              : "Loading..."}
-          </p>
+          <div className="text-2xl text-white flex flex-col" style={{ color: "#fff" }}>
+            {data?.pages.map((page) => page.items.map((i, id) => (
+              <FreeTierItem key={id} item={i.item} />
+            )))}
+          </div>
+          <div className="text-lg italic text-center">
+            {error
+              ? error.message
+              : hasNextPage
+                ? isFetchingNextPage
+                  ? "Loading more..."
+                  : "Scroll to load more"
+                : isFetching
+                  ? "Loading..."
+                  : data?.pages && data?.pages[0]?.metadata.totalHits === 0
+                    ? "No free stuff here"
+                    : "You've reached the bottom"}
+          </div>
         </div>
       </main>
     </>
