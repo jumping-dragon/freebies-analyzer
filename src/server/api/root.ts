@@ -1,4 +1,5 @@
 import { awsRouter } from "~/server/api/routers/aws";
+import { oracleRouter } from "~/server/api/routers/oracle";
 import { createTRPCRouter } from "~/server/api/trpc";
 import { tseRouter } from "./routers/tse";
 
@@ -9,6 +10,7 @@ import { tseRouter } from "./routers/tse";
  */
 export const appRouter = createTRPCRouter({
   aws: awsRouter,
+  oracle: oracleRouter,
   tse: tseRouter
 });
 
