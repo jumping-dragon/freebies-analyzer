@@ -62,6 +62,8 @@ resource "aws_cloudfront_cache_policy" "cache_policy" {
 
 
   parameters_in_cache_key_and_forwarded_to_origin {
+    enable_accept_encoding_gzip = true
+    enable_accept_encoding_brotli = true
     cookies_config {
       cookie_behavior = var.cache_policy.cookies_config.cookie_behavior
 
